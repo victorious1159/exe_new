@@ -1,8 +1,7 @@
 {
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--openssl-legacy-provider"
     }
-  ]
+  }
 }
