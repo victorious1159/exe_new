@@ -1,11 +1,9 @@
-import React, { Fragment, useState, useEffect, useContext } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { getAllCombos } from "../../admin/combos/FecthApi";
 
-const apiURL = process.env.REACT_APP_API_URL;
-
 const SingleCombo = (props) => {
-  const [comboData, setComboData] = useState()
+  const [comboData, setComboData] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
@@ -16,7 +14,7 @@ const SingleCombo = (props) => {
   const fetchData = async () => {
     try {
       let responseData = await getAllCombos();
-      setComboData(responseData.combos)
+      setComboData(responseData.combos || []);
     } catch (error) {
       console.log(error);
     }
@@ -24,14 +22,28 @@ const SingleCombo = (props) => {
 
   return (
     <Fragment>
-      {comboData && comboData.length > 0 ? (
+      {comboData.length > 0 ? (
         comboData.map((item, index) => {
           return (
             <Fragment key={index}>
-              <div className="relative col-span-1 m-2 mb-5 bg-white item-single ">
+              <div className="relative col-span-1 m-2 mb-5 bg-white item-single">
+                {/* Combo image */}
+                <img
+                  className="w-full h-32 object-cover"
+                  src={
+                    item.comboImage ||
+                    "https://i5.walmartimages.com/seo/50ea-11-1-4-X-8-5-8-X-2-1-4-Blue-Corrugated-Tuck-Top-Box-by-Paper-Mart_4a11a76b-9f4b-469f-8b0b-07c1392f8f03.0bf86223473a07dedefff9abeacd7c24.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
+                  }
+                  alt={item.comboName}
+                />
                 <div className="p-3">
                   <div className="flex items-center justify-between mt-2">
-                    <div className="text-gray-600 font-light truncate" onClick={()=>{history.push(`/combo/${item._id}`)}}>
+                    <div
+                      className="text-gray-600 font-light truncate cursor-pointer"
+                      onClick={() => {
+                        history.push(`/combo/${item._id}`);
+                      }}
+                    >
                       {item.comboName}
                     </div>
                     <div className="flex items-center space-x-1">
@@ -64,20 +76,19 @@ const SingleCombo = (props) => {
         })
       ) : (
         <div className="col-span-2 md:col-span-3 lg:col-span-4 flex items-center justify-center text-2xl">
-          <div className=" text-2xl text-center">
+          <div className="text-2xl text-center">
             <div className="flex flex-col items-center justify-center">
               <img
                 className=""
                 src="./image/NoFoundProductInWishlist.gif"
-                alt="Girl in a jacket"
-              ></img>
+                alt="No combo available"
+              />
             </div>
-            {/* No product found in wishList */}
           </div>
         </div>
       )}
     </Fragment>
   );
-}
+};
 
 export default SingleCombo;
