@@ -41,3 +41,12 @@ export const postDeleteImage = async (id) => {
     console.log(error);
   }
 };
+
+export const getAllOrders = async () => {
+  try {
+    let res = await axios.get(`${apiURL}/api/order/get-all-orders`)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
